@@ -1,5 +1,6 @@
 #include "shaderClass.h"
 
+// Function that gets a file content and ouputs a string with the content
 std::string get_file_contents(const char* filename)
 {
 	std::ifstream in(filename, std::ios::binary);
@@ -16,6 +17,7 @@ std::string get_file_contents(const char* filename)
 	throw(errno);
 }
 
+// Constructor that builds Shader program from two different shaders
 Shader::Shader(const char* vertexFile, const char* fragmentFile)
 {
 	std::string vertexCode = get_file_contents(vertexFile);
