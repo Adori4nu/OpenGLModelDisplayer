@@ -1,6 +1,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <stb/stb_image.h>
 
 #include "shaderClass.h"
 #include "VAO.h"
@@ -23,20 +24,17 @@ int main()
 
 	// Vertices coordinates
 	GLfloat vertices[] =
-	{ //				COORDINATES                  /		COLORS			//
-		-0.5f, -0.5f * float(sqrt(3)) / 3,     0.0f,	0.8f, 0.3f, 0.02f,  // Lower left
-		0.5f,  -0.5f * float(sqrt(3)) / 3,     0.0f,	0.8f, 0.3f, 0.02f,  // Lower right
-		0.0f,   0.5f * float(sqrt(3)) * 2 / 3, 0.0f,	1.0f, 0.6f, 0.32f,	// Upper corrner
-		-0.25f, 0.5f * float(sqrt(3)) / 6,	   0.0f,	0.9f, 0.45f, 0.17f,	// Inner left
-		0.25f,  0.5f * float(sqrt(3)) / 6,     0.0f,	0.9f, 0.45f, 0.17f,	// Inner right
-		0.0f,  -0.5f * float(sqrt(3)) / 3,     0.0f,	0.8f, 0.3f, 0.02f,	// Inner down
+	{ //				COORDINATES      /		COLORS			//
+		-0.5f, -0.5f, 0.0f,					1.0f, 0.0f, 0.0f,	// Lower left
+		-0.5f,  0.5f, 0.0f,					0.0f, 1.0f, 0.0f,	// Lower right
+		 0.5f,  0.5f, 0.0f,					0.0f, 0.0f, 1.0f,	// Upper corrner
+		 0.5f, -0.5f, 0.0f,					1.0f, 1.0f, 1.0f,	// Inner left
 	};
 
 	GLuint indices[] =
 	{
-		0, 3, 5, // Lower left triangle
-		3, 2, 4, // Lower right trinagle
-		5, 4, 1  // Upper triangle
+		0, 2, 1, // Upper triangle
+		0, 3, 2, // Lower trinagle
 	};
 
 	// Create a GLFWwindow object
@@ -91,7 +89,7 @@ int main()
 		// Bind the VAO so OpenGL knows to use it
 		VAO1.Bind();
 		// Draw the triangle using the GL_TRIANGLES primitive
-		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		// Swap the back buffer with the fornt buffer
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
