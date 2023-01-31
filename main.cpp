@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
 
+#include "Texture.h"
 #include "shaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
@@ -24,11 +25,11 @@ int main()
 
 	// Vertices coordinates
 	GLfloat vertices[] =
-	{ //				COORDINATES      /		COLORS			//
-		-0.5f, -0.5f, 0.0f,					1.0f, 0.0f, 0.0f,	// Lower left
-		-0.5f,  0.5f, 0.0f,					0.0f, 1.0f, 0.0f,	// Lower right
-		 0.5f,  0.5f, 0.0f,					0.0f, 0.0f, 1.0f,	// Upper corrner
-		 0.5f, -0.5f, 0.0f,					1.0f, 1.0f, 1.0f,	// Inner left
+	{ //				COORDINATES      /		COLORS			//			TEXTURE MAPPIN CORDINATES
+		-0.5f, -0.5f, 0.0f,					1.0f, 0.0f, 0.0f,				0.0f, 0.0f,					// Lower left
+		-0.5f,  0.5f, 0.0f,					0.0f, 1.0f, 0.0f,				0.0f, 1.0f,					// Lower right
+		 0.5f,  0.5f, 0.0f,					0.0f, 0.0f, 1.0f,				1.0f, 1.0f,					// Upper corrner
+		 0.5f, -0.5f, 0.0f,					1.0f, 1.0f, 1.0f,				1.0f, 0.0f,					// Inner left
 	};
 
 	GLuint indices[] =
@@ -69,14 +70,20 @@ int main()
 	EBO EBO1(indices, sizeof(indices));
 
 	// Links VBO to VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	// Unbinds all to prevent accidental modifying
 	VAO1.Unbind();
 	VBO1.Unbind();
 	EBO1.Unbind();
 
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
+	// Texture
+	
+	Texture popCat("Resources/pop_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	popCat.texUnit(shaderProgram, "tex0", 0);
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -86,6 +93,7 @@ int main()
 		// Tell OpenGL which Shader Program we want to use
 		shaderProgram.Activate();
 		glUniform1f(uniID, 0.5f);
+		popCat.Bind();
 		// Bind the VAO so OpenGL knows to use it
 		VAO1.Bind();
 		// Draw the triangle using the GL_TRIANGLES primitive
@@ -100,6 +108,7 @@ int main()
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
+	popCat.Delete();
 	shaderProgram.Delete();
 
 	// Delete window before ending the program
