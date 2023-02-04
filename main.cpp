@@ -98,7 +98,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
-	Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+	Camera camera(WIDTH, HEIGHT, glm::vec3(-1.75f, 1.25f, -2.5f));
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
@@ -109,7 +109,7 @@ int main()
 		shaderProgram.Activate();
 
 		camera.Inputs(window);
-		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
 		popCat.Bind();
 		// Bind the VAO so OpenGL knows to use it
