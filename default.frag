@@ -5,6 +5,9 @@ in vec3 color;
 
 in vec2 texCoord;
 
+in vec3 Normal;
+in vec3 crntPos;
+
 uniform sampler2D tex0;
 
 uniform sampler2D tex1;
@@ -79,5 +82,5 @@ vec4 directionalLight()
 
 void main()
 {
-	FragColor = spotLight();
+	FragColor = pointLight();
 }
