@@ -1,3 +1,6 @@
+//#include <filesystem>
+//namespace fs = std::filesystem;
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -148,10 +151,13 @@ int main()
 	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
+	//std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
+	std::string texPath = "Resources/";
+
 	// Texture
-	Texture planksTex("Resources/planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	Texture planksTex((texPath + "planks.png").c_str(), GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
 	planksTex.texUnit(shaderProgram, "tex0", 0);
-	Texture planksSpec("Resources/planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+	Texture planksSpec((texPath + "planksSpec.png").c_str(), GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
 	planksSpec.texUnit(shaderProgram, "tex1", 1);
 
 	glEnable(GL_DEPTH_TEST);
