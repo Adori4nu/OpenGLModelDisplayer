@@ -3,8 +3,15 @@
 Model::Model(const char* file)
 {
 	// Make a JSON object
-	std::string text = get_file_contents(file);
-	JSON = json::parse(text);
+	try
+	{
+		std::string text = get_file_contents(file);
+		JSON = json::parse(text);
+	}
+	catch (...)
+	{
+		std::cout << "DUPA" << std::endl;
+	}
 
 	// Get the binary data
 	Model::file = file;
