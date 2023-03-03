@@ -58,7 +58,8 @@ int main()
 
 	Camera camera(WIDTH, HEIGHT, glm::vec3(-1.75f, 1.25f, -2.5f));
 
-	std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
+	//FREE CODE CAMPU W PATH BRAKUJE
+	std::string parentDir = (fs::current_path()).string();
 	std::string modelPath = "\\model\\Karambit_GLTF.gltf";
 	std::cout << (parentDir + modelPath).c_str();
 	Model model((parentDir + modelPath).c_str());

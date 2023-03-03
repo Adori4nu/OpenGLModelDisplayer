@@ -5,12 +5,16 @@ Model::Model(const char* file)
 	// Make a JSON object
 	try
 	{
+		std::cout << "\nReading file " << file << std::endl;
 		std::string text = get_file_contents(file);
+		std::cout << "Got:\n" << text << std::endl;
 		JSON = json::parse(text);
+		std::cout << "Done Parsing." << std::endl;
 	}
 	catch (...)
 	{
 		std::cout << "DUPA" << std::endl;
+		throw;
 	}
 
 	// Get the binary data
@@ -141,9 +145,12 @@ std::vector<unsigned char> Model::getData()
 
 	// Store raw text data into bytesText
 	std::string fileStr = std::string(file);
-	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
+	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('\\') + 1);
+	std::cout << "\nuri: " + (fileDirectory + uri) << std::endl;
+	std::cout << "\nFileStr: " + fileStr << std::endl;
+	std::cout << "\nFileDirectory: " + fileDirectory << std::endl;
 	bytesText = get_file_contents((fileDirectory + uri).c_str());
-
+	std::cout << "\n" + bytesText << std::endl;
 	// Transform the raw text data into bytes and put them in a vector
 	std::vector<unsigned char> data(bytesText.begin(), bytesText.end());
 	return data;
@@ -240,7 +247,7 @@ std::vector<Texture> Model::getTextures()
 	std::vector<Texture> textures;
 
 	std::string fileStr = std::string(file);
-	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
+	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('\\') + 1);
 
 	// Go over all images
 	for (unsigned int i = 0; i < JSON["images"].size(); i++)
@@ -264,7 +271,7 @@ std::vector<Texture> Model::getTextures()
 		if (!skip)
 		{
 			// Load diffuse texture
-			if (texPath.find("baseColor") != std::string::npos)
+			if (texPath.find("BaseColor") != std::string::npos)
 			{
 				Texture diffuse = Texture((fileDirectory + texPath).c_str(), "diffuse", loadedTex.size());
 				textures.push_back(diffuse);
@@ -272,11 +279,18 @@ std::vector<Texture> Model::getTextures()
 				loadedTexName.push_back(texPath);
 			}
 			// Load specular texture
-			else if (texPath.find("metallicRoughness") != std::string::npos)
+			else if (texPath.find("OcclusionRoughnessMetallic") != std::string::npos)
 			{
 				Texture specular = Texture((fileDirectory + texPath).c_str(), "specular", loadedTex.size());
 				textures.push_back(specular);
 				loadedTex.push_back(specular);
+				loadedTexName.push_back(texPath);
+			}
+			else if (texPath.find("Normal") != std::string::npos)
+			{
+				Texture normal = Texture((fileDirectory + texPath).c_str(), "normal", loadedTex.size());
+				textures.push_back(normal);
+				loadedTex.push_back(normal);
 				loadedTexName.push_back(texPath);
 			}
 		}
